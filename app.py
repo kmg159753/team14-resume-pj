@@ -13,26 +13,45 @@ jwt = JWTManager(app)
 # 메인 페이지
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('register.html')
 
 # 회원가입
 @app.route('/signup', methods=['POST'])
 def signup():
-    #user_data = request.json
-    #existing_user = db.users.find_one({'user_id': user_data['user_id']})
-    # 회원 가입 로직 구현
 
-    return jsonify({'message': 'User created successfully'}), 201
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    existing_user = db.users.find_one({'user_id': id_receive})
+
+    if existing_user is not None :
+        return jsonify({'message': '이미 존재하는 아이디입니다.'})
+
+    hashed_password = generate_password_hash(pw_receive)
+
+    user = {
+        'user_id': id_receive,
+        'user_password': hashed_password
+    }
+    db.users.insert_one(user)
+
+    return jsonify({'message': '회원가입에 성공했습니다.'})
 
 # 로그인
 @app.route('/login', methods=['POST'])
 def login():
-    #user_data = request.json
-    #user = db.users.find_one({'user_id': user_data['user_id']})
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
 
-    # 로그인 로직 구현
+    user = db.users.find_one({'user_id': id_receive})
 
-    return jsonify({'access_token': None})
+    if not user or not check_password_hash(user['user_password'], pw_receive):
+        print(user['user_password'] + "    " + pw_receive)
+        return jsonify({'message': '존재하지 않는 아이디이거나 비밀번호가 틀립니다.'})
+
+    access_token = create_access_token(identity=user['user_id'])
+
+    return jsonify({'access_token': access_token})
 
 # 이력서 작성
 @app.route('/resume', methods=['POST'])
