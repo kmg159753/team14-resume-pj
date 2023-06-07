@@ -84,8 +84,7 @@ def after_login():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         print(payload)
-        return render_template('resume.html')
-    
+        return render_template('resume.html')    
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
     except jwt.exceptions.DecodeError:
