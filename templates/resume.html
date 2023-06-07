@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원가입 페이지</title>
+    <title>이력서 페이지</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-    
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
 
@@ -46,6 +46,27 @@
         }
     </style>
     <script>
+        $(document).ready(function(){
+           get_resume();
+        });
+
+        function get_resume() {
+            fetch('/resume').then((res) => res.json()).then((data) => {
+
+                let row = data['result']
+
+                // let object = row['_id']    
+                let userid = row['user_id']
+                let name = row['name']
+                let age = row['age']
+                let career = row['career']
+                let address = row['address']
+
+                console.log(object, userid, name, age, career, address)
+
+            })
+        }
+
 
         function create_resume() {
             let name = $('#name').val()
@@ -57,28 +78,18 @@
             formData.append("name_give", name);
             formData.append("age_give", age);
             formData.append("career_give", career);
-            formData.append("addresse_give", address);
+            formData.append("address_give", address);
 
 
 
             fetch('/resume', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
-
-                alert(data['message'])                
-                window.location.replace('resume.html')
-                
+                alert(data['message'])
+                window.location.reload()                
             })
         }
 
-        function get_resume(){
-            fetch('/resume').then((res) => res.json()).then((data) => {
+        
 
-                alert(data['message'])                
-                window.location.replace('resume.html')
-
-            })
-        }
-
-       
     </script>
 </head>
 
@@ -88,11 +99,11 @@
         <p>성함 : <input id="name" type="text" /></p>
         <p>나이 : <input id="age" type="text" /></p>
         <p>경력 : <input id="career" type="text" /></p>
-        <p>나이 : <input id="address" type="text" /></p>
+        <p>주소 : <input id="address" type="text" /></p>
         <button onclick="create_resume()"> 저장하기</button>
     </div>
 
-    
+
 </body>
 
 </html>
