@@ -46,9 +46,7 @@
         }
     </style>
     <script>
-        $(document).ready(function(){
-           get_resume();
-        });
+        
 
         function get_resume() {
             fetch('/resume').then((res) => res.json()).then((data) => {
@@ -86,15 +84,12 @@
                 alert(data['message'])
                 window.location.reload()                
             })
-        }
-
-        
+        }      
 
     </script>
 </head>
 
 <body>
-
     <div class="wrap">
         <p>성함 : <input id="name" type="text" /></p>
         <p>나이 : <input id="age" type="text" /></p>
@@ -102,8 +97,6 @@
         <p>주소 : <input id="address" type="text" /></p>
         <button onclick="create_resume()"> 저장하기</button>
     </div>
-
-
 </body>
 
 </html>
