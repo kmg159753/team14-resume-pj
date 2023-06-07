@@ -68,7 +68,7 @@ def login():
 
         access_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        print("token:" + access_token)
+        # print("token:" + access_token)
 
         return jsonify({'message': '로그인에 성공했습니다.','result': 'success' ,'token': access_token})
          
@@ -83,13 +83,65 @@ def after_login():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
         return render_template('resume.html')    
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
     except jwt.exceptions.DecodeError:
         return redirect("login.html")   
     
-   
+@app.route('/call_login')
+def call_login():  
+    return render_template('login.html')
+
+@app.route('/call_register')
+def call_register():  
+    return render_template('register.html')
+
+@app.route("/resume", methods=["POST"])
+def resume_post():
+    name_receive = request.form['name_give']
+    age_receive = request.form['age_give']
+    career_receive = request.form['career_give']
+    address_receive = request.form['address_give']     
+    
+
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        
+        user = {
+            'user_id': payload['id'],
+            'name': name_receive,
+            'age': age_receive,
+            'career': career_receive,
+            'address' : address_receive
+        }
+        db.resumes.insert_one(user)
+        return jsonify({'message':'저장완료'})      
+
+    except jwt.ExpiredSignatureError:
+        return redirect("main.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("main.html")    
+    
+@app.route("/resume", methods=["GET"])
+def resume_get():
+    token_receive = request.cookies.get('mytoken')
+    print("get실행")
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])        
+        user = db.resumes.find_one({'user_id': payload['id']})
+        print("_id : " + user['user_id'])
+        
+        return jsonify({'result': user })      
+
+    except jwt.ExpiredSignatureError:
+        return redirect("main.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("main.html")  
+    
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
