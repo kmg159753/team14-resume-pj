@@ -115,11 +115,27 @@ def resume_post():
 
     token_receive = request.cookies.get('mytoken')
 
+    # # 현재 최대 ID 값 확인
+    # current_max_id = db.resumes.find_one(sort=[("resume_id", -1)])
+
+    # # 현재 최대 ID 값이 없는 경우 초기값 1 설정
+    # if current_max_id is None:
+    #     next_id = 1
+    # else:
+    #     next_id = current_max_id['resume_id'] + 1
+
+    if len(list(db.resumes.find({}, {'_id': False}))) == 0:
+        idnum = 1
+    else:
+        idnum = db.resumes.find_one(sort=[("resume_id", -1)])["resume_id"] + 1   
+        
+
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         
         resume = {
             'user_id': payload['id'],
+            'resume_id': idnum,
             'name': name_receive,
             'contacts': contacts_receive,
             'email': email_receive,
@@ -139,20 +155,17 @@ def resume_post():
     except jwt.exceptions.DecodeError:
         return redirect("main.html")    
     
-@app.route("/api/resume1", methods=["GET"])
+@app.route("/api/resume", methods=["GET"])
 def resume_get():
-    token_receive = request.cookies.get('mytoken')
-    print("get실행sssssssssssssssssssssssssssssssssssssssssssss")
+    token_receive = request.cookies.get('mytoken')   
 
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])        
-        resume = db.resumes.find_one({'user_id': payload['id']})
-
-        print("get끝남sssssssssssssssssssssssssssssssssssssssssssss")
-        print("이력서 정보 : " + resume['name'])
-        resume['_id'] = str(resume['_id'])
+        resume = db.resumes.find_one({'user_id': payload['id'], 'resume_id': 2})
         
-        return jsonify({'result':resume })      
+        resume['_id'] = str(resume['_id'])
+
+        return jsonify({'result': resume })      
 
     except jwt.ExpiredSignatureError:
         return redirect("main.html")
