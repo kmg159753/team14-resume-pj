@@ -54,24 +54,37 @@ function save_info() {
     let desired_maj_skill = $("#desired_maj_skill").val();
   
     //최종경력
-    let last_career = $("#last_career").val();
+    // let last_career = $("#last_career").val();
     // 신입 or // 경력
   
-    //경력일 경우
-    let last_company_name = $("#last_company_name").val();
-    let last_role = $("#last_role").val();
-    let last_employment = $("#last_employment").val();
+    // //경력일 경우
+    // let last_company_name = $("#last_company_name").val();
+    // let last_role = $("#last_role").val();
+    // let last_employment = $("#last_employment").val();
   
     //최종 학력
     let last_school_name = $("#last_school_name").val();
     let last_comp_stat = $("#last_comp_stat").val();
     let last_major = $("#last_major").val();
+
+    let formData = new FormData();
+    formData.append("name_give", name);
+    formData.append("contacts_give", contacts);
+    formData.append("email_give", email);
+    formData.append("desired_position_give", desired_position);
+    formData.append("desired_role_give", desired_role);
+    formData.append("desired_work_exp_give", desired_work_exp);
+    formData.append("desired_maj_skill_give", desired_maj_skill);
+    formData.append("last_school_name_give", last_school_name);
+    formData.append("last_comp_stat_give", last_comp_stat);
+    formData.append("last_major_give", last_major);
+    
   
     fetch("/api/resume", { method: "POST", body: formData })
       .then((res) => res.json())
       .then((data) => {
         //console.log(data)
-        alert(data["msg"]);
+        alert(data["message"]);
         window.location.reload();
       });
   }
