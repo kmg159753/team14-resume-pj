@@ -83,7 +83,7 @@ def after_login():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('resume.html')    
+        return render_template('index.html')    
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
     except jwt.exceptions.DecodeError:
