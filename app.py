@@ -139,7 +139,7 @@ def resume_post():
     except jwt.exceptions.DecodeError:
         return redirect("main.html")    
     
-@app.route("/resume", methods=["GET"])
+@app.route("/api/resume", methods=["GET"])
 def resume_get():
     token_receive = request.cookies.get('mytoken')
     print("get실행")
