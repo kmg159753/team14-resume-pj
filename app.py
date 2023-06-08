@@ -81,9 +81,11 @@ def login():
 @app.route('/call_resume')
 def after_login():
     token_receive = request.cookies.get('mytoken')
+
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('index.html')    
+        return render_template('index.html')     
+
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
     except jwt.exceptions.DecodeError:
@@ -97,12 +99,18 @@ def call_login():
 def call_register():  
     return render_template('register.html')
 
-@app.route("/resume", methods=["POST"])
+@app.route("/api/resume", methods=["POST"])
 def resume_post():
     name_receive = request.form['name_give']
-    age_receive = request.form['age_give']
-    career_receive = request.form['career_give']
-    address_receive = request.form['address_give']     
+    contacts_receive = request.form['contacts_give']
+    email_receive = request.form['email_give']
+    desired_position_receive = request.form['desired_position_give']     
+    desired_role_receive = request.form['desired_role_give']
+    desired_work_exp_receive = request.form['desired_work_exp_give']
+    desired_maj_skill_receive = request.form['desired_maj_skill_give']
+    last_school_name_receive = request.form['last_school_name_give']  
+    last_comp_stat_receive = request.form['last_comp_stat_give']
+    last_major_receive = request.form['last_major_give'] 
     
 
     token_receive = request.cookies.get('mytoken')
@@ -113,9 +121,15 @@ def resume_post():
         user = {
             'user_id': payload['id'],
             'name': name_receive,
-            'age': age_receive,
-            'career': career_receive,
-            'address' : address_receive
+            'contacts': contacts_receive,
+            'email': email_receive,
+            'jikgun' : desired_position_receive,
+            'jikmu' : desired_role_receive,
+            'career' : desired_work_exp_receive,
+            'skill' : desired_maj_skill_receive,
+            'school' : last_school_name_receive,
+            'state' : last_comp_stat_receive,
+            'major' :  last_major_receive,
         }
         db.resumes.insert_one(user)
         return jsonify({'message':'저장완료'})      
@@ -133,7 +147,6 @@ def resume_get():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])        
         user = db.resumes.find_one({'user_id': payload['id']})
-        print("_id : " + user['user_id'])
         
         return jsonify({'result': user })      
 
