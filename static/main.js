@@ -45,9 +45,9 @@ $(document).ready(function () {
 });
 
 function show_info() {
-  console.log("실행됐나요1")
-  fetch('/api/resume1').then((res) => res.json()).then((data) => {
-      console.log("실행됐나요12")    
+  
+  fetch('/api/resume').then((res) => res.json()).then((data) => {
+       
       
       let row = data['result']
       
@@ -68,7 +68,7 @@ function show_info() {
                             </div>
                             <div class="information-wrap-emailbox">
                                 <div class="email">이메일</div>
-                                <input class="emailbox" type="text" placeholder="메일" id="email" value="${row['email']}"/>                              ']}"/>
+                                <input class="emailbox" type="text" placeholder="메일" id="email" value="${row['email']}"/>                              
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ function show_info() {
 
                                 <div class="information-wrap-emailbox">
                                   <div class="email">직무 스킬</div>
-                                  <input class="emailbox" type="text" placeholder="스킬" id="desired_maj_skill"/>
+                                  <input class="emailbox" type="text" placeholder="스킬" id="desired_maj_skill"  value="${row['skill']}"/>
                               </div>
                               
                             </div>
@@ -174,12 +174,12 @@ function show_info() {
                             <div class="name-contact-email">
                                 <div class="information-wrap-namebox">
                                     <div class="name">학교명</div>
-                                    <input class="namebox" type="text" placeholder="학교명 입력" id="last_school_name"/>
+                                    <input class="namebox" type="text" placeholder="학교명 입력" id="last_school_name" value="${row['school']}"/>
                                 </div>
                                 <div class="information-wrap-namebox">
                                     <label class="complete-title" for="inputGroupSelect01">이수 상태</label>
                         
-                                    <select class="small-job-select-option" id="last_comp_stat">
+                                    <select class="small-job-select-option" id="last_comp_stat"  value="${row['state']}" >
                                         <option selected>-- 선택하기 --</option>
                                         <option value="1">졸업</option>
                                         <option value="2">재학중</option>
@@ -195,7 +195,7 @@ function show_info() {
                                   </div>   
                                 <div class="information-wrap-emailbox">
                                     <div class="email">학과명</div>
-                                    <input class="emailbox" type="text" placeholder="학과명 입력" id="last_major"/>
+                                    <input class="emailbox" type="text" placeholder="학과명 입력" id="last_major" value="${row['major']}"/>
                                 </div>
                             </div>         
                                   
@@ -213,23 +213,13 @@ function save_info() {
     let name = $("#name").val();
     let contacts = $("#contacts").val();
     let email = $("#email").val();
-    //값 넘기기
-    // let info_value = $("#info_value").val();
-  
-    //희망직무 // 너무 긴 것 같으면 수정 부탁드림당 밑에 최종경력이랑 단어가 겹쳐서..
+    
     let desired_position = $("#desired_position").val();
     let desired_role = $("#desired_role").val();
     let desired_work_exp = $("#desired_work_exp").val();
     let desired_maj_skill = $("#desired_maj_skill").val();
   
-    //최종경력
-    // let last_career = $("#last_career").val();
-    // 신입 or // 경력
-  
-    // //경력일 경우
-    // let last_company_name = $("#last_company_name").val();
-    // let last_role = $("#last_role").val();
-    // let last_employment = $("#last_employment").val();
+    
   
     //최종 학력
     let last_school_name = $("#last_school_name").val();
