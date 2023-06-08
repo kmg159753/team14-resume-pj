@@ -23,6 +23,7 @@
 <!-- Navbar-->
 <div></div>
 <!-- 기본정보 -->
+<div>
 <div class="container" id="con">
     <div class="container-wrap">
         <div class="information-wrap">
@@ -79,15 +80,13 @@
                         <option value="4">앱 개발자</option>
                         <option value="5">머신러닝/인공지능 개발자</option>
                         <option value="6">게임 개발자</option>
-                        <option value="7">기타</option>
-                        
+                        <option value="7">기타</option>                        
                       </select>
                 </div>
                 <div class="information-wrap-namebox">
                     <div>
                         <label class="small-job-select-title" for="inputGroupSelect01">경력</label>
-                    </div>
-        
+                    </div>        
                     <select class="small-job-select-option" id="desired_work_exp">
                         <option selected>-- 선택하기 --</option>
                         <option value="1">직무 관련 경력 없음</option>
@@ -170,9 +169,16 @@
             </div>         
                  
         </div>
-      </div>      
+        
+      </div>            
 </div>
-<button onclick="save_info()">저장하기</button>
+<div class="all_btn">
+  <button class="w-100 btn btn-lg btn-primary" type="button" onclick="save_info()">저장하기</button>
+</div>
+</div>
+
+
+
       
 
       
