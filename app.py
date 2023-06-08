@@ -71,20 +71,19 @@ def login():
         # print("token:" + access_token)
 
         return jsonify({'message': '로그인에 성공했습니다.','result': 'success' ,'token': access_token})
-         
     
     
     else: 
         return jsonify({'message': '존재하지 않는 아이디이거나 비밀번호가 틀립니다.','result': 'fail'})
         
 
-@app.route('/call_resume')
+@app.route('/call_main')
 def after_login():
     token_receive = request.cookies.get('mytoken')
 
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('index.html')     
+        return render_template('main.html')     
 
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
@@ -98,6 +97,20 @@ def call_login():
 @app.route('/call_register')
 def call_register():  
     return render_template('register.html')
+
+@app.route('/call_write')
+def call_write_resume():
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('write_resume.html')    
+
+    except jwt.ExpiredSignatureError:
+        return redirect("main.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("main.html")     
+    
 
 @app.route("/api/resume", methods=["POST"])
 def resume_post():
@@ -173,6 +186,62 @@ def resume_get():
         return redirect("main.html")
     except jwt.exceptions.DecodeError:
         return redirect("main.html")  
+    
+# 값 받아오기
+@app.route("/main/resume", methods=["GET"])
+def resume_list_get():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        resume = list(db.resumes.find({},{'_id':False}))
+        return jsonify({'result': resume})              
+    except jwt.ExpiredSignatureError:
+        return redirect("login.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("login.html")  
+
+#조회 페이지이동
+@app.route('/resumes/<int:idnum>')
+def search_page(idnum):
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('view_resume.html')              
+    except jwt.ExpiredSignatureError:
+        return redirect("main.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("main.html")  
+    
+@app.route('/resume_show/<int:idnum>')
+def sda(idnum):
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        print("idnum::::: " + str(idnum))
+        resume = db.resumes.find_one({'user_id': payload['id'], 'resume_id': idnum})
+        print("resume : " + resume['name'])
+        resume['_id'] = str(resume['_id'])
+        return jsonify({'result': resume })              
+    except jwt.ExpiredSignatureError:
+        return redirect("main.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("main.html")      
+    
+@app.route('/api/resume/delete/<int:pnum>', methods=['DELETE'])
+def resume_delete(pnum):
+    print('남바: ' + str(pnum))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        db.resumes.delete_one({'user_id': payload['id'],'resume_id':pnum})
+        return jsonify({'msg': '삭제 완료!'})                      
+    except jwt.ExpiredSignatureError:
+        return redirect("view_resume.html")
+    except jwt.exceptions.DecodeError:
+        return redirect("view_resume.html")
+       
+                 
     
 
 if __name__ == '__main__':
