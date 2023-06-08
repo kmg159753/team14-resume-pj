@@ -108,6 +108,7 @@ def resume_post():
     desired_role_receive = request.form['desired_role_give']
     desired_work_exp_receive = request.form['desired_work_exp_give']
     desired_maj_skill_receive = request.form['desired_maj_skill_give']
+    junior_senior_receive = request.form['junior_senior_give']
     last_school_name_receive = request.form['last_school_name_give']  
     last_comp_stat_receive = request.form['last_comp_stat_give']
     last_major_receive = request.form['last_major_give'] 
@@ -143,6 +144,7 @@ def resume_post():
             'jikmu' : desired_role_receive,
             'career' : desired_work_exp_receive,
             'skill' : desired_maj_skill_receive,
+            'jors'  : junior_senior_receive,
             'school' : last_school_name_receive,
             'state' : last_comp_stat_receive,
             'major' :  last_major_receive,
@@ -161,7 +163,7 @@ def resume_get():
 
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])        
-        resume = db.resumes.find_one({'user_id': payload['id'], 'resume_id': 2})
+        resume = db.resumes.find_one({'user_id': payload['id'], 'resume_id': 5})
         
         resume['_id'] = str(resume['_id'])
 

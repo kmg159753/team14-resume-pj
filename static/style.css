@@ -26,6 +26,11 @@
     gap: 20px;
     grid-template-columns: 150px 1fr;
   }
+
+  /* .btn-outline-primary.active {
+    background-color: #007bff;
+    color: #fff;
+  } */
   
   .education-title,
   .final-career,

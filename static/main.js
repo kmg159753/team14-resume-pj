@@ -50,6 +50,126 @@ function show_info() {
        
       
       let row = data['result']
+
+      var selectedjikgunText;
+      switch (row['jikgun']) {
+        case '1':
+          selectedjikgunText = '개발';
+          break;
+        case '2':
+          selectedjikgunText = '기획';
+          break;
+        case '3':
+          selectedjikgunText = '마케팅';
+          break;
+        case '4':
+          selectedjikgunText = '디자인';
+          break;
+        case '5':
+          selectedjikgunText = '경영,인사,운영';
+          break;
+        case '6':
+          selectedjikgunText = '기타';
+          break;        
+        default:
+          selectedjikgunText = '-- 선택하기 --';
+      }
+
+      var selectedjikmuText;
+      switch (row['jikmu']) {
+        case '1':
+          selectedjikmuText = '프론트엔드 개발자';
+          break;
+        case '2':
+          selectedjikmuText = '서버/백앤드 개발자';
+          break;
+        case '3':
+          selectedjikmuText = '웹 풀스택 개발자';
+          break;
+        case '4':
+          selectedjikmuText = '앱 개발자';
+          break;
+        case '5':
+          selectedjikmuText = '머신러닝/인공지능 개발자';
+          break;
+        case '6':
+          selectedjikmuText = '게임 개발자';
+          break;
+        case '7':
+          selectedjikmuText = '기타';
+          break;
+        default:
+          selectedjikmuText = '-- 선택하기 --';
+      }
+      
+      var selectedcareerText;
+      switch (row['career']) {
+        case '1':
+          selectedcareerText = '졸업';
+          break;
+        case '2':
+          selectedcareerText = '1년차';
+          break;
+        case '3':
+          selectedcareerText = '2년차';
+          break;
+        case '4':
+          selectedcareerText = '3년차';
+          break;
+        case '5':
+          selectedcareerText = '4년차';
+          break;
+        case '6':
+          selectedcareerText = '5년차';
+          break;
+        case '7':
+          selectedcareerText = '6년차';
+          break;
+        case '8':
+          selectedcareerText = '7년차 이상';
+          break;  
+        default:
+          selectedcareerText = '-- 선택하기 --';
+      }
+
+      var selectedstateText;
+      switch (row['state']) {
+        case '1':
+          selectedstateText = '졸업';
+          break;
+        case '2':
+          selectedstateText = '재학중';
+          break;
+        case '3':
+          selectedstateText = '휴학중';
+          break;
+        case '4':
+          selectedstateText = '수료';
+          break;
+        case '5':
+          selectedstateText = '중퇴';
+          break;
+        case '6':
+          selectedstateText = '자퇴';
+          break;
+        case '7':
+          selectedstateText = '졸업예정';
+          break;
+        default:
+          selectedstateText = '-- 선택하기 --';
+      }
+
+      var selectedmorsText;
+      switch (row['jors']) {
+        case '1':
+          selectedmorsText = '신입';
+          break;
+        case '2':
+          selectedmorsText = '경력';  
+        default:
+          selectedmorsText = '-- 선택하기 --';   
+      }
+
       
       $('#con').empty()   
       
@@ -84,7 +204,7 @@ function show_info() {
                                         <label class="small-job-select-title" for="inputGroupSelect01">직군</label>
                                       </div>
                         
-                                    <select class="small-job-select-option" id="desired_position" value="${row['jikgun']}">
+                                    <select class="small-job-select-option" id="desired_position" value="${selectedjikgunText}">
                                     
                                         <option selected>-- 선택하기 --</option>
                                         <option value="1">개발</option>
@@ -101,7 +221,7 @@ function show_info() {
                                         <label class="small-job-select-title" for="inputGroupSelect01">직무</label>
                                     </div>
                         
-                                    <select class="small-job-select-option" id="desired_role" value="${row['jikmu']}">
+                                    <select class="small-job-select-option" id="desired_role" value="${selectedjikmuText}">
                                         <option selected>-- 선택하기 --</option>
                                         <option value="1">프론트엔드 개발자</option>
                                         <option value="2">서버/백앤드 개발자</option>
@@ -118,7 +238,7 @@ function show_info() {
                                         <label class="small-job-select-title" for="inputGroupSelect01">경력</label>
                                     </div>
                         
-                                    <select class="small-job-select-option" id="desired_work_exp" value="${row['career']}">
+                                    <select class="small-job-select-option" id="desired_work_exp" value="${selectedcareerText}">
                                         <option selected>-- 선택하기 --</option>
                                         <option value="1">직무 관련 경력 없음</option>
                                         <option value="2">1년 차</option>
@@ -150,15 +270,18 @@ function show_info() {
                           </div>
                           <div class="choose-career">
                             <div class="choose-career">              
-                              <div class="information-wrap-namebox">
-                            
-                                <div class="name" style="font-size: 15px;">경력 구분</div>
-                                <div class="career-division-select">
-                                  <!-- 버튼 누른값 가져오기 검색하면 가져올수 있습니당. -->
-                                  <button type="button" class="btn btn-outline-primary" style="width: 200px;">경력</button>
-                                  <button type="button" class="btn btn-outline-primary" style="width: 200px;">신입</button>
-                                </div>
-                            </div>
+                            <div class="information-wrap-namebox">
+                            <div>
+                                <label class="small-job-select-title" for="inputGroupSelect01">경력 구분</label>
+                            </div>        
+                            <select class="small-job-select-option" id="desired_work_exp" value="${selectedmorsText}">
+                                <option selected>-- 선택하기 --</option>
+                                <option value="1">신입</option>
+                                <option value="2">경력</option>
+                                
+                                
+                              </select>
+                        </div>  
                             </div>
                           </div>
                     </div>
@@ -179,7 +302,7 @@ function show_info() {
                                 <div class="information-wrap-namebox">
                                     <label class="complete-title" for="inputGroupSelect01">이수 상태</label>
                         
-                                    <select class="small-job-select-option" id="last_comp_stat"  value="${row['state']}" >
+                                    <select class="small-job-select-option" id="last_comp_stat"  value="${selectedstateText}" >
                                         <option selected>-- 선택하기 --</option>
                                         <option value="1">졸업</option>
                                         <option value="2">재학중</option>
@@ -208,6 +331,19 @@ function show_info() {
   })
 }
 
+
+
+function select_senior(){
+  junior_senior='경력'
+}
+
+// 경력 버튼 클릭 시
+function select_junior(){
+  junior_senior='신입'
+}
+
+
+
 function save_info() {
     //기본정보
     let name = $("#name").val();
@@ -218,8 +354,7 @@ function save_info() {
     let desired_role = $("#desired_role").val();
     let desired_work_exp = $("#desired_work_exp").val();
     let desired_maj_skill = $("#desired_maj_skill").val();
-  
-    
+    let junior_or_senior = $("#junior_or_senior").val();     
   
     //최종 학력
     let last_school_name = $("#last_school_name").val();
@@ -234,6 +369,7 @@ function save_info() {
     formData.append("desired_role_give", desired_role);
     formData.append("desired_work_exp_give", desired_work_exp);
     formData.append("desired_maj_skill_give", desired_maj_skill);
+    formData.append("junior_senior_give", junior_or_senior);
     formData.append("last_school_name_give", last_school_name);
     formData.append("last_comp_stat_give", last_comp_stat);
     formData.append("last_major_give", last_major);
