@@ -118,7 +118,7 @@ def resume_post():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         
-        user = {
+        resume = {
             'user_id': payload['id'],
             'name': name_receive,
             'contacts': contacts_receive,
@@ -131,7 +131,7 @@ def resume_post():
             'state' : last_comp_stat_receive,
             'major' :  last_major_receive,
         }
-        db.resumes.insert_one(user)
+        db.resumes.insert_one(resume)
         return jsonify({'message':'저장완료'})      
 
     except jwt.ExpiredSignatureError:
