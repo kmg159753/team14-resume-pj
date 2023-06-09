@@ -120,4 +120,8 @@
     background-color: #eef3f6;
   }
   
-
+  .all_btn{
+    background-color: red;
+    width: 200px; 
+    margin: 0px auto 500px auto;
+  }

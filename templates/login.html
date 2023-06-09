@@ -51,7 +51,7 @@
                     if (data['result'] == 'success') {
                         $.cookie('mytoken', data['token']);
                         alert(data['message'])
-                        window.location.replace('/call_resume')
+                        window.location.replace('/call_main')
                     }
                     else if (data['result'] == 'fail') {
                         alert(data['message'])
