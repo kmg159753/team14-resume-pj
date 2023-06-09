@@ -185,63 +185,8 @@ def resume_get():
     except jwt.ExpiredSignatureError:
         return redirect("main.html")
     except jwt.exceptions.DecodeError:
-        return redirect("main.html")  
-    
-# 값 받아오기
-@app.route("/main/resume", methods=["GET"])
-def resume_list_get():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        resume = list(db.resumes.find({'user_id': payload['id']},{'_id':False}))
-        return jsonify({'result': resume})              
-    except jwt.ExpiredSignatureError:
-        return redirect("login.html")
-    except jwt.exceptions.DecodeError:
-        return redirect("login.html")  
-
-#조회 페이지이동
-@app.route('/resumes/<int:idnum>')
-def search_page(idnum):
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('view_resume.html')              
-    except jwt.ExpiredSignatureError:
-        return redirect("main.html")
-    except jwt.exceptions.DecodeError:
-        return redirect("main.html")  
-    
-@app.route('/resume_show/<int:idnum>')
-def sda(idnum):
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-
-        print("idnum::::: " + str(idnum))
-        resume = db.resumes.find_one({'user_id': payload['id'], 'resume_id': idnum})
-        print("resume : " + resume['name'])
-        resume['_id'] = str(resume['_id'])
-        return jsonify({'result': resume })              
-    except jwt.ExpiredSignatureError:
-        return redirect("main.html")
-    except jwt.exceptions.DecodeError:
         return redirect("main.html")      
-    
-@app.route('/api/resume/delete/<int:pnum>', methods=['DELETE'])
-def resume_delete(pnum):
-    print('남바: ' + str(pnum))
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        db.resumes.delete_one({'user_id': payload['id'],'resume_id':pnum})
-        return jsonify({'msg': '삭제 완료!'})                      
-    except jwt.ExpiredSignatureError:
-        return redirect("view_resume.html")
-    except jwt.exceptions.DecodeError:
-        return redirect("view_resume.html")
-       
-                 
+
     
 
 if __name__ == '__main__':
