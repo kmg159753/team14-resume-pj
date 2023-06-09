@@ -141,16 +141,13 @@
                     let title = a['name'];
                     let temp_html = `
                         <ul class="list-group">
-                            <li class="list-group-item" onclick="index(${num})">${title}</li>
+                            <li class="list-group-item" onclick="index(${num})">${title} 이력서 ${num}</li>
                         </ul>`;
                     $('#resume_list').append(temp_html);
                 });
             });
         }
         //<li class="list-group-item" onclick="index(${num})">${title}</li>
-
-
-
 
         function index(num) {
             window.location.href = `/resumes/${num}`;
