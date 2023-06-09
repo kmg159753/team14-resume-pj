@@ -193,7 +193,7 @@ def resume_list_get():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        resume = list(db.resumes.find({},{'_id':False}))
+        resume = list(db.resumes.find({'user_id': payload['id']},{'_id':False}))
         return jsonify({'result': resume})              
     except jwt.ExpiredSignatureError:
         return redirect("login.html")
