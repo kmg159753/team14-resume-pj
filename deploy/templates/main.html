@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>이력서 목록</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .body-wrap {
+            position: relative;
+            margin: 0 auto;
+            width: 1100px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            width: 1000px;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            background-color: #fafafa;
+            width: 250px;
+            height: 100vh;
+            padding: 20px;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            flex: 1;
+        }
+
+        .write-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            z-index: 1000;
+        }
+
+        .write-btn a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .list-group-item {
+            width: 500px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        h5 {
+            margin-bottom: 30px;
+        }
+
+        .resume-title {
+            font-size: 32px;
+            margin-bottom: 50px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .side-title {
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+
+        /* 자동 무한 슬라이드 실험 */
+        .slide_wrap{
+            width:550px;
+            height: 700px;
+            margin:0 auto;
+            position: relative;
+            margin-top: 200px;
+            overflow: hidden;
+            list-style: none;
+        }
+        .slides{
+            width:2970px;
+            height: 700px;
+            position: absolute;
+            top:0;
+            left:0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .slides.animated{
+            transition-duration: 0.5s;
+        }
+        .slides > li{
+            width:550px;
+            height: 700px;
+            border:1px solid black;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 300px;
+            font-weight: bold;
+            float: left;
+        }
+        /* 마지막 자식만 빼고 마진라이트 값 주기 */
+        .slides li:not(:last-child){
+            margin-right:30px;
+        }
+        /* 실험끝 */
+
+    </style>
+
+
+</head>
+
+<body>
+    <div class="body-wrap">
+        <div class="main-container">
+            <div class="sidebar">
+                <!-- 사이드바 내용 추가 -->
+                <div class="side-title"><b>항해99 15기</b></div>
+                <p> 우리 모두 포기하지말기<br>
+                    함께 끝까지 완주하기<br>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum alias, velit consectetur,
+                    perspiciatis, nisi harum sint impedit obcaecati culpa voluptatem nihil libero! Ipsa quia veritatis
+                    eum blanditiis dignissimos nihil.</p>
+            </div>
+            <div class="container">
+                <div class="resume-title">이력서 목록</div>
+                <div id="resume_list"></div>
+                
+                <button class="write-btn" onclick = "window.location.href='/call_write'">이력서 작성하기</button>
+                <div id="resume_list"></div>
+                <!-- 자동 무한 슬라이드 실험 -->
+                <div class="slide_wrap">
+                    <ul class="slides">
+                        <li>1번 이력서</li>
+                        <li>5번 이력서</li>
+                        <li>6번 이력서</li>
+                    </ul>
+                </div>
+                <!-- 실험끝 -->
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            show_resumeList();
+        });
+
+        function show_resumeList() {
+            fetch('/main/resume').then((res) => res.json()).then((data) => {
+                let rows = data['result'];
+
+                $('#resume_list').empty();
+                console.log("확인")
+                rows.forEach((a) => {
+                    let num = a['resume_id'];
+                    let title = a['name'];
+                    let temp_html = `
+                        <ul class="list-group">
+                            <li class="list-group-item" onclick="index(${num})">${title} 이력서 ${num}</li>
+                        </ul>`;
+                    $('#resume_list').append(temp_html);
+                });
+            });
+        }
+        //<li class="list-group-item" onclick="index(${num})">${title}</li>
+
+        function index(num) {
+            window.location.href = `/resumes/${num}`;
+        }
+
+         // 자동 무한 슬라이드 실험
+         slides = document.querySelector(".slides");
+        slide = document.querySelectorAll(".slides > li");
+        // slide는 배열형태로 저장되어 있음
+        // slide[0],slide[1],slide[2] 순서대로 li가 저장됨
+        slideCount = slide.length;  // 슬라이드의 li갯수
+        slideWidth = 550;  //이미지 1개의 가로 사이즈
+        slideMargin = 30;  //이미지의 오른쪽마진값
+        curPos = 0; //이미지 시작위치
+
+        // 1.li를 복제 시켜준다(무한 슬라이드를 위해)
+        // 2.복제한 li를 감싸고 있는 ul(slides)의 가로 길이를 구한다.
+        // 3.처음부터 복제한 li를 보여 주는 것이 아니라
+        //   원본 li를 보여주기 위해서 ul의 위치를 조정한다.
+        // 4.slides(ul)를 움직이는 함수 생성
+        // 5.버튼 이벤트 적용시키기
+
+        // 복제시키는 함수
+        // element.cloneNode()
+        // a.cloneNode(); 라고 작성하면 a만 복제하겠다.
+        // a.cloneNode(true); 라고 작성하면 a안에 있는 내용(자식)까지 복제하겠다.
+
+        function makeClone(){
+            // slide[0].cloneNode(true);
+            // slide[1].cloneNode(true);
+            // slide[2].cloneNode(true);
+
+            for(i = 0; i < slideCount; i++){
+                clones = slide[i].cloneNode(true);  //li를 순서대로 복제해서 clones라는 변수에 넣음
+                clones.classList.add("clone");   //classList.add는 클래스를 추가한다는 뜻, 복제한 li에 clone이라는 클래스를 추가함
+                slides.appendChild(clones);   //appendChild는 젤마지막아이라는 뜻, 복제한 li를 slides의 제일 아래쪽에 넣음
+                
+            }
+            // slide[2].cloneNode(true);
+            // slide[1].cloneNode(true);
+            // slide[0].cloneNode(true);
+            for(i = slideCount-1; i >= 0; i--){
+                clones = slide[i].cloneNode(true);
+                clones.classList.add("clone");
+                slides.prepend(clones);
+                // prepend는 slides의 자식들의 제일 앞쪽에 붙여넣음
+            }
+        }
+        makeClone();
+        newSlideCount = document.querySelectorAll(".slides>li").length;
+        //newSlideCount에는 9값이 들어가 있음
+        // 이미지의 가로사이즈(300)+마진값(30)=(330)에 x newSlideCount를 곱함
+        // slides의 가로 사이즈를 구할 수 있음
+        slides.style.width = (slideWidth + slideMargin) * newSlideCount + "px";
+        //(300+30) * 9 + "px" = "2970px";
+        slides.classList.add("animated");
+
+        //원본의 li가 left:0으로 이동하게 수정
+        //이미지의 사이즈 x 원본의 갯수(3개)
+        //(slideWidth + slideMargin)*slideCount;
+        init = (slideWidth + slideMargin)*slideCount;
+        slides.style.transform ="translateX(-" + init +"px)";
+
+        function moveSlide(num){
+            slides.style.left = -(slideWidth + slideMargin) * num + "px";
+            curPos = num;
+            if(curPos == 3){
+                setTimeout(function(){
+                    slides.classList.remove("animated");
+                    slides.style.left ="0";  
+                },800);
+                setTimeout(function(){
+                    slides.classList.add("animated");
+                },900)
+                curPos = 0;
+
+            }
+        }
+
+        setInterval(function(){
+            moveSlide(curPos+1);
+        }, 2000)
+        // 실험끝
+
+    </script>
+</body>
+
+</html>
